@@ -1,69 +1,82 @@
-import { useState } from 'react'
+import "./App.css";
 
 function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const handleLogin = () => {
-    console.log('Login:', { email, password })
-    alert('Login button clicked!')
-  }
+  const courses = [
+    {
+      title: "System Administration and IT Infrastructure Services",
+    },
+    {
+      title: "Operating Systems Becoming a Power User",
+    },
+    {
+      title: "The Bits and Bytes of Computer Networking",
+    },
+    {
+      title: "Technical Support Fundamentals",
+    },
+    {
+      title: "How to Succeed at: Writing Applications",
+    },
+    {
+      title: "Medicine Administration for Carers",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-lg flex">
-        {/* Left Side - Placeholder Image */}
-        <div className="bg-gray-300 flex items-center justify-center rounded-l-2xl" style={{ width: '600px', height: '500px' }}>
-          <p className="text-gray-500 text-6xl">600 × 500</p>
-        </div>
+    <>
+      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {courses.map((course, index) => (
+          <div key={index} className="shadow rounded-lg overflow-hidden flex flex-col 
+          hover:border hover:border-gray-500
+          hover:shadow-lg hover:scale-105 transition-shadow duration-300"
+          >
 
-        {/* Right Side - Login Form */}
-        <div className="flex flex-col justify-center p-12" style={{ width: '600px' }}>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-8 text-center">Login</h1>
-          
-          <div className="space-y-6">
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Masukkan email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900"
-              />
+            {/* Image */}
+            <img
+              src="https://www.placehold.co/300x200"
+              alt={course.title}
+              className="w-full h-44 object-cover"
+            />
+
+            {/* Content */}
+            <div className="p-4 bg-red-100 flex flex-col justify-between h-full">
+              <h3 className="text-lg font-semibold mb-4">{course.title}</h3>
+
+              <div className="bg-red-50 p-2 rounded-lg">
+                <div className="text-sm text-gray-500 mt-2 flex justify-between">
+                  <span>👥 123 users</span>
+                  <span>⏱ 60 min</span>
+                </div>
+
+                {/* Author */}
+                <div className="mt-3 mb-2 flex items-center gap-2">
+                  <img
+                    src="https://www.placehold.co/50x50"
+                    alt="Author's Avatar"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="text-sm font-medium">Author's Name</p>
+                    <p className="text-xs text-gray-500">Designer</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="mt-4 flex items-center justify-between">
+                <div className="bg-white py-2 px-4 rounded">$123</div>
+                <button
+                  className="bg-red-700 hover:bg-red-900 active:bg-red-500
+                  text-white py-2 px-4 rounded text-sm">
+                  Get Started
+                </button>
+              </div>
             </div>
-
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Masukkan password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900"
-              />
-            </div>
-
-            {/* Login Button */}
-            <button
-              onClick={handleLogin}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-xl"
-            >
-              Login
-            </button>
           </div>
-        </div>
+        ))}
       </div>
-    </div>
-  )
+    </>
+  );
 }
 
-export default App
+export default App;

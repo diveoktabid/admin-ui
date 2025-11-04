@@ -1,5 +1,5 @@
 import React from "react";
-import PostCard from "./postCard";
+import PostCard from "./PostCard";
 import { postsData } from "./postsData";
 
 const Exercise = () => {

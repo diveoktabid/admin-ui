@@ -5,7 +5,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Icon from '../Elements/Icon';
 import { NavLink } from 'react-router-dom';
 import { ThemeContext } from '../../context/themeContext';
-import { AuthContext } from '../../context/authContext';    
+import { AuthContext } from '../../context/authContext';
+import { logoutService } from '../../services/authService.jsx';    
 
 function MainLayout(props) {
     const { children } = props;

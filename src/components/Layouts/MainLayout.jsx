@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Logo from '../Elements/Logo';
 import Input from '../Elements/Input';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Icon from '../Elements/Icon';
 import { NavLink } from 'react-router-dom';
 import { ThemeContext } from '../../context/themeContext';
@@ -10,6 +12,7 @@ import { logoutService } from '../../services/authService.jsx';
 
 function MainLayout(props) {
     const { children } = props;
+    const [loading, setLoading] = useState(false);
 
 const themes = [
   { name: "theme-green", bgcolor: "bg-[#299D91]", color: "#299D91" },
@@ -35,6 +38,7 @@ const { theme, setTheme } = useContext(ThemeContext);
     
     const handleLogout = async () => {
     try {
+      setLoading(true);
       await logoutService();
       logout(); 
     } catch (err) {
@@ -42,19 +46,20 @@ const { theme, setTheme } = useContext(ThemeContext);
       if (err.status === 401) {
         logout();
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-        <div className={`flex min-h-screen ${theme.name}`}>
-            <aside className='bg-defaultBlack w-28 sm:w-64 text-special-bg2
-            flex flex-col justify-between px-7 py-12'>
-                <div>
+        <div className={`flex h-screen overflow-hidden ${theme.name}`}>
+            <aside className='bg-defaultBlack w-28 sm:w-64 text-special-bg2 flex flex-col justify-between px-7 py-12 overflow-hidden'>
+                <div className='flex-shrink-0'>
                     <div className='mb-10'>
                         <Logo variant="secondary" />
                     </div>
-                    <nav>
+                    <nav className='space-y-1'>
                         {menu.map((item) => (
                             <NavLink
                                 key={item.id}
@@ -73,21 +78,21 @@ const { theme, setTheme } = useContext(ThemeContext);
                         ))}
                     </nav> 
                 </div>
-            <div>
-            Themes
-            <div className="flex flex-col sm:flex-row gap-2 items-center">
+            <div className='flex-shrink-0'>
+            <div className='mb-4 text-sm text-gray-03'>Themes</div>
+            <div className="flex flex-col sm:flex-row gap-2 items-center mb-6">
               {themes.map((t) => (
                 <div
                   key={t.name}
-                  className={`${t.bgcolor} w-6 h-6 rounded-md cursor-pointer mb-2`}
+                  className={`${t.bgcolor} w-6 h-6 rounded-md cursor-pointer`}
                   onClick={() => setTheme(t)}
                 ></div>
               ))}
             </div>
           </div>
-                <div>
-                    <div onClick={handleLogout} className="cursor-pointer">
-                    <div className='flex bg-special-bg3 text-white px-4 py-3 rounded-md'>
+                <div className='flex-shrink-0'>
+                    <div onClick={handleLogout} className="cursor-pointer mb-6">
+                    <div className='flex bg-special-bg3 text-white px-4 py-3 rounded-md hover:bg-opacity-80 transition-all'>
                         <div className='mx-auto sm:mx-0 text-primary'>
                             <Icon.Logout />
                         </div>
@@ -95,23 +100,21 @@ const { theme, setTheme } = useContext(ThemeContext);
                     </div>
                 </div>
 
-                    <div className='border my-10 border-b-special-bg'></div>
+                    <div className='border-t border-special-bg mb-6'></div>
                     <div className='flex justify-between items-center'>
-                        <div>Avatar</div>
+                        <div className='text-gray-03 hidden sm:block'>Avatar</div>
                         <div className='hidden sm:block'>
-                        <div>{user.name}</div>
-                            <br />
-                            View Profile
+                        <div className='font-semibold'>{user.name}</div>
+                            <div className='text-xs text-gray-03 mt-1'>View Profile</div>
                         </div>
-                        <div className='hidden sm:block'>
+                        <div className='hidden sm:block cursor-pointer'>
                             <Icon.Detail size={15} />
                         </div>
                     </div>
-                    <div>User</div>
                 </div>
             </aside>
-            <div className='bg-special-mainBg flex-1 flex flex-col'>
-                <header className='border border-b border-gray-05 px-6 py-7 flex justify-between'>
+            <div className='bg-special-mainBg flex-1 flex flex-col overflow-hidden'>
+                <header className='border-b border-gray-05 px-6 py-7 flex justify-between flex-shrink-0'>
                     <div className='flex items-center'>
                         <div className='font-bold text-2xl me-6'><div>{user.name}</div></div>
                         <div className='text-gray-03 flex'>
@@ -126,9 +129,18 @@ const { theme, setTheme } = useContext(ThemeContext);
                         <Input backgroundColor="bg-white" border="boreder-white" />
                     </div>
                 </header>
-                <main className='flex-1 px-6 py-4'>{children}</main>
+                <main className='flex-1 px-6 py-4 overflow-y-auto'>{children}</main>
             </div>
         </div>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <div className="flex flex-col items-center gap-4">
+            <CircularProgress color="inherit" size={50} />
+            <div className="text-white text-lg font-medium">Logging out</div>
+          </div>
+        </Backdrop>
     </>
   )
 }
